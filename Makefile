@@ -1,5 +1,5 @@
-CC		 := gcc
-CFLAGS	 := -Wall -Wextra -std=c11 -g -lcurl
+CXX 	 := g++
+CXXFLAGS := -Wall -Wextra -std=c++1z -g -lcurl
 
 PROGRAMS := tf-monitor \
 	tf-config \
@@ -8,14 +8,17 @@ PROGRAMS := tf-monitor \
 
 all: $(PROGRAMS)
 
-tf-monitor: monitor.c
-	$(CC) -o $@ $< $(CFLAGS)
+tf-monitor: cmd.cc monitor.cc common.cc
+	$(CXX) -o $@ $^ $(CXXFLAGS)
 
-tf-config: config.c
-	$(CC) -o $@ $< $(CFLAGS)
+tf-config: config.cc cmd.cc
+	$(CXX) -o $@ $^ $(CXXFLAGS)
 
-tf-query: query.c
-	$(CC) -o $@ $< $(CFLAGS)
+tf-query: query.cc cmd.cc
+	$(CXX) -o $@ $^ $(CXXFLAGS)
 
-tf-configdb: configdb.c
-	$(CC) -o $@ $< $(CFLAGS)
+tf-configdb: configdb.cc cmd.cc
+	$(CXX) -o $@ $^ $(CXXFLAGS)
+
+clean:
+	rm -f $(PROGRAMS) *~ *exe
