@@ -123,14 +123,17 @@ int process_cmdline(int argc, char** argv, int optindx)
     // Depending on which command that was passed, a specific
     // subcommand list needs to be fetched
     // First command should be on argv[optindx]
-    string cmd{argv[optindx]};
+    vector<string> cmdline;
+    for (int i = optindx; i < argc; ++i)
+        cmdline.push_back(string{argv[i]});
+
+    string cmd = cmdline[0];
     int TODO;
     if (cmd == "infrastructure")
     {
         //TODO: implement
         TODO=1;
 
-        curl_GET("192.168.101.50:<port>/build/this/path/acording/to/spec");
     }
     else if (cmd == "security")
     {
@@ -141,6 +144,31 @@ int process_cmdline(int argc, char** argv, int optindx)
     {
         //TODO: implement
         TODO=1;
+        string subcmd{};
+        string netw_uuid{};
+
+        if (cmdline.size() == 3)
+        {
+            subcmd = cmdline[1];
+            if (subcmd == "show")
+            {
+                netw_uuid = cmdline[2];
+                // Example on how to get virtual network details of VN with UUID c5228c98-8707-4f23-a6fa-a7787c17c374
+                curl_GET("http://192.168.101.50:8082/virtual-network/" + netw_uuid );
+            }
+            else
+            {
+                cout << "For demo-purposes, just enter the following command:\n\n\n"
+                    << "tf-monitor networking show c5228c98-8707-4f23-a6fa-a7787c17c374 | jq" << endl;
+                return 0;
+            }
+        }
+        else
+        {
+            cout << "For demo-purposes, just enter the following command:\n\n\n"
+                << "tf-monitor networking show c5228c98-8707-4f23-a6fa-a7787c17c374 | jq" << endl;
+            return 0;
+        }
     }
     else if (cmd == "debug")
     {

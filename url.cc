@@ -1,4 +1,5 @@
 #include <curl/curl.h>
+#include <iostream>
 
 #include "common.hh"
 #include "url.hh"
@@ -25,4 +26,5 @@ int curl_GET(const std::string& url)
         curl_easy_cleanup(curl);
     }
     curl_global_cleanup();
+    std::cout << std::endl;
 }
