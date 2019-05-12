@@ -4,10 +4,9 @@
 #include <libgen.h>
 #include <getopt.h>
 
-#include <curl/curl.h>
-
 #include "common.hh"
 #include "cmd.hh"
+#include "url.hh"
 
 #define     PROGRAM     "tf-monitor" 
 
@@ -27,10 +26,10 @@ static void populate_cmd_tree()
     root_infra.addChild("dashboard");
     root_infra.getChild("dashboard").addChild("system-info");
     root_infra.getChild("dashboard").addChild("logs");
+    root_infra.getChild("dashboard").addChild("alarms");
 
     root_infra.addChild("control-nodes");
-    root_infra.getChild("control-nodes").addChild("foo");
-    root_infra.getChild("control-nodes").addChild("bar");
+    root_infra.getChild("control-nodes").addChild("show");
 
     root_infra.addChild("virtual-routers");
     root_infra.getChild("virtual-routers").addChild("routes");
@@ -44,17 +43,29 @@ static void populate_cmd_tree()
     /************************************************************************/
     /*************** Security: populate commands ****************************/
     /************************************************************************/
+    root_sec.addChild("dashboard");
+    root_sec.addChild("traffic-groups");
     root_sec.addChild("help");
     /************************************************************************/
     /*************** Networking : populate commands *************************/
     /************************************************************************/
+    root_netw.addChild("dashboard");
+    root_netw.getChild("dashboard").addChild("networks");
+    root_netw.getChild("dashboard").addChild("instances");
+    root_netw.getChild("dashboard").addChild("interfaces");
+    root_netw.getChild("dashboard").addChild("port-distribution");
+
+    root_netw.addChild("projects");
+
     root_netw.addChild("networks");
+    root_netw.getChild("networks").addChild("show");
+
     root_netw.addChild("instances");
-    root_netw.addChild("ports");
-    root_netw.addChild("asdfas");
-    root_netw.addChild("asdfas");
-    root_netw.addChild("asdfas");
-    root_netw.addChild("asdfas");
+    root_netw.getChild("instances").addChild("show");
+
+    root_netw.addChild("interfaces");
+    root_netw.getChild("interfaces").addChild("show");
+
     root_netw.addChild("help");
     /************************************************************************/
     /*************** Debug: populate commands *******************************/
@@ -119,25 +130,7 @@ int process_cmdline(int argc, char** argv, int optindx)
         //TODO: implement
         TODO=1;
 
-        // Curl-related (please move to another file asap...)
-        CURL* curl;
-        CURLcode res;
-
-        curl_global_init(CURL_GLOBAL_DEFAULT);
-        curl = curl_easy_init();
-        if (curl)
-        {
-            curl_easy_setopt(curl, CURLOPT_URL, "santi.lmera.ericsson.se:5050/some/path/of/the/rest/api/specification");
-            // Don't verify CAcert or host
-            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-            res = curl_easy_perform(curl);
-            if (res != CURLE_OK)
-                err("curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-            // Cleanup
-            curl_easy_cleanup(curl);
-        }
-        curl_global_cleanup();
+        curl_GET("192.168.101.50:<port>/build/this/path/acording/to/spec");
     }
     else if (cmd == "security")
     {

@@ -8,7 +8,7 @@ PROGRAMS := tf-monitor \
 
 all: $(PROGRAMS)
 
-tf-monitor: cmd.cc monitor.cc common.cc
+tf-monitor: cmd.cc monitor.cc common.cc url.cc
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 tf-config: config.cc cmd.cc
