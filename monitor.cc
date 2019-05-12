@@ -1,3 +1,11 @@
+/*
+ * API specification at: http://www.opencontrail.org/documentation/api/r3.2/contrail_openapi.html
+ * In this file only two example have been given:
+ *
+ * 1.) Listing a specific virtual network
+ * 2.) Listing all virtual networks
+ *
+ * */
 #include <iostream>
 #include <string>
 
@@ -153,20 +161,27 @@ int process_cmdline(int argc, char** argv, int optindx)
             if (subcmd == "show")
             {
                 netw_uuid = cmdline[2];
+                if (netw_uuid == "all")
+                    curl_GET( "http://192.168.101.50:8082/virtual-networks" );
+                else
                 // Example on how to get virtual network details of VN with UUID c5228c98-8707-4f23-a6fa-a7787c17c374
-                curl_GET("http://192.168.101.50:8082/virtual-network/" + netw_uuid );
+                    curl_GET("http://192.168.101.50:8082/virtual-network/" + netw_uuid );
             }
             else
             {
                 cout << "For demo-purposes, just enter the following command:\n\n\n"
-                    << "tf-monitor networking show c5228c98-8707-4f23-a6fa-a7787c17c374 | jq" << endl;
+                    << "tf-monitor networking show c5228c98-8707-4f23-a6fa-a7787c17c374 | jq" << endl
+                    << endl << "or" << endl
+                    << "tf-monitor networking show all | jq" << endl;
                 return 0;
             }
         }
         else
         {
             cout << "For demo-purposes, just enter the following command:\n\n\n"
-                << "tf-monitor networking show c5228c98-8707-4f23-a6fa-a7787c17c374 | jq" << endl;
+                << "tf-monitor networking show c5228c98-8707-4f23-a6fa-a7787c17c374 | jq" << endl
+                << endl << "or" << endl
+                << "tf-monitor networking show all | jq" << endl;
             return 0;
         }
     }
