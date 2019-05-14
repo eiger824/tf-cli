@@ -16,7 +16,8 @@
 #include "cmd.hh"
 #include "url.hh"
 
-#define     PROGRAM     "tf-monitor" 
+#define     PROGRAM         "tf-monitor"
+#define     CONTAINS(A,B)   string{A}.find(B, 0) != string::npos
 
 using namespace std;
 
@@ -137,18 +138,17 @@ int process_cmdline(int argc, char** argv, int optindx)
 
     string cmd = cmdline[0];
     int TODO;
-    if (cmd == "infrastructure")
-    {
-        //TODO: implement
-        TODO=1;
-
-    }
-    else if (cmd == "security")
+    if (CONTAINS("infrastructure", cmd))
     {
         //TODO: implement
         TODO=1;
     }
-    else if (cmd == "networking")
+    else if (CONTAINS("security", cmd))
+    {
+        //TODO: implement
+        TODO=1;
+    }
+    else if (CONTAINS("networking", cmd))
     {
         //TODO: implement
         TODO=1;
@@ -158,10 +158,10 @@ int process_cmdline(int argc, char** argv, int optindx)
         if (cmdline.size() == 3)
         {
             subcmd = cmdline[1];
-            if (subcmd == "show")
+            if (CONTAINS("show", subcmd))
             {
                 netw_uuid = cmdline[2];
-                if (netw_uuid == "all")
+                if (CONTAINS("all", netw_uuid))
                     curl_GET( "http://192.168.101.50:8082/virtual-networks" );
                 else
                 // Example on how to get virtual network details of VN with UUID c5228c98-8707-4f23-a6fa-a7787c17c374
@@ -185,7 +185,7 @@ int process_cmdline(int argc, char** argv, int optindx)
             return 0;
         }
     }
-    else if (cmd == "debug")
+    else if (string{"debug"}.find(cmd, 0) != string::npos)
     {
         //TODO: implement
         TODO=1;
